@@ -17,7 +17,7 @@ Générateur de CV interactif construit avec Next.js. L’objectif du projet est
 
 ## Captures D’écran
 
-Voici deux exemples de CV que l’on peut obtenir avec ce projet. Vous pouvez remplacer ces images par vos propres exports dans le dépôt si vous voulez montrer d’autres styles.
+Voici 4 exemples de CV que l’on peut obtenir avec ce projet. Vous pouvez remplacer ces images par vos propres exports dans le dépôt si vous voulez montrer d’autres styles.
 
 <p align="center">
 	<img src="template_cv/Template1.png" alt="Exemple de CV généré - template 1" width="46%" />
