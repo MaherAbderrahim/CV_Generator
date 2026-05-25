@@ -1,0 +1,21 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model CV {
+  id           String   @id @default(uuid())
+  title        String   @default("Mon CV")
+  template     String   @default("primary")
+  colors       String   @default("{\"primary\":\"#00bcd4\",\"secondary\":\"#1e293b\",\"text\":\"#0f172a\",\"background\":\"#ffffff\",\"sidebarBg\":\"#0f172a\",\"sidebarText\":\"#ffffff\"}")
+  typography   String   @default("{\"fontFamily\":\"Inter\",\"fontSize\":\"medium\",\"lineHeight\":\"normal\"}")
+  layout       String   @default("{\"sidebarSide\":\"left\",\"sectionsOrder\":[\"profile\",\"experience\",\"education\",\"projects\",\"certifications\",\"skills\",\"languages\",\"interests\",\"custom\"]}")
+  personalInfo String   @default("{\"firstName\":\"\",\"lastName\":\"\",\"title\":\"\",\"email\":\"\",\"phone\":\"\",\"address\":\"\",\"website\":\"\",\"photoUrl\":\"\",\"summary\":\"\"}")
+  sections     String   @default("[]") // JSON string of CVSection array
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

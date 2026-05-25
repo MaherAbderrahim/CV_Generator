@@ -1,0 +1,372 @@
+Je vais te donner le contexte complet du projet avant de te demander les corrections, afin que tu comprennes bien l’architecture, l’objectif produit et le fonctionnement global de l’application.
+
+Le projet est une application web moderne de génération de CV développée avec Next.js/React (et probablement Tailwind CSS).
+Ce n’est plus un clone basique : l’objectif est maintenant d’en faire une vraie plateforme professionnelle de création de CV premium.
+
+Contexte du produit
+
+L’interface est divisée en deux grandes parties :
+
+Partie gauche : éditeur
+
+À gauche, l’utilisateur remplit les informations de son CV via un système de sections dynamiques.
+
+Exemples de sections :
+
+Informations personnelles
+Contact
+Expérience professionnelle
+Formation
+Compétences
+Langues
+Projets
+Certifications
+Réseaux sociaux
+etc.
+
+L’utilisateur peut :
+
+ajouter des sections,
+supprimer des sections,
+réorganiser les sections,
+modifier les contenus en temps réel.
+
+Il existe aussi plusieurs options de personnalisation :
+
+changement de couleurs,
+changement de polices,
+taille de police,
+espacement/interligne,
+thèmes,
+designs/templates différents,
+etc.
+Partie droite : preview temps réel
+
+À droite, on a un aperçu live du CV.
+
+Toutes les modifications faites dans l’éditeur doivent être reflétées instantanément dans le preview :
+
+texte,
+couleurs,
+typographie,
+espacements,
+templates,
+sections,
+etc.
+
+Le projet possède déjà plusieurs templates/designs de CV, avec un système de personnalisation dynamique.
+
+Le CV doit également pouvoir être exporté proprement en PDF avec un rendu fidèle au preview.
+
+Objectif technique
+
+Je ne veux pas simplement corriger quelques bugs visuels.
+
+Je veux :
+
+une architecture propre,
+un système scalable,
+un code maintenable,
+une bonne séparation des responsabilités,
+une cohérence entre les templates,
+un vrai système de thème/design,
+et une base solide pour continuer à faire évoluer le produit.
+
+Quand tu fais des corrections :
+
+analyse toujours la cause profonde,
+évite les hacks temporaires,
+évite les hardcodes,
+factorise ce qui doit l’être,
+et garde une architecture propre et extensible.
+
+Maintenant que tu as le contexte complet du projet, voici les problèmes et améliorations que je veux que tu traites.
+
+Mais il reste encore plusieurs problèmes d’UX, de cohérence visuelle et de fonctionnalités que je veux que tu corriges proprement, avec une approche professionnelle et maintenable.
+
+Je veux que tu analyses chaque problème en profondeur, identifies la vraie cause, puis appliques une correction propre sans casser l’architecture existante.
+
+# 1. Bug : changement de taille de police qui ne fonctionne pas
+
+Actuellement, quand je change la taille de la police (petit / moyen / grand), rien ne se passe dans le CV.
+
+Tu dois :
+
+* Identifier pourquoi le paramètre ne se propage pas.
+* Vérifier :
+
+  * le state,
+  * les props,
+  * le context/store,
+  * les variables CSS,
+  * les classes Tailwind,
+  * les styles inline,
+  * et les composants templates.
+* Vérifier si la valeur change réellement dans le state mais n’est pas appliquée visuellement.
+* Corriger le binding complet.
+* Faire en sorte que le changement soit :
+
+  * instantané,
+  * visible en temps réel,
+  * cohérent sur tous les templates,
+  * sauvegardé,
+  * et compatible avec l’export PDF.
+
+Je veux un vrai système scalable de typography settings, pas juste un patch rapide.
+
+## Ajout de nouvelles polices premium
+
+Actuellement, il y a trop peu de polices et elles ne sont pas très modernes/élégantes.
+
+Je veux que tu ajoutes plusieurs nouvelles polices professionnelles et premium, par exemple :
+
+* Poppins
+* Inter
+* Manrope
+* DM Sans
+* Plus Jakarta Sans
+* Outfit
+* Source Sans 3
+* Nunito Sans
+* Lora
+* Merriweather
+
+Tu dois :
+
+* intégrer correctement les Google Fonts,
+* optimiser leur chargement,
+* éviter les problèmes de performance,
+* permettre leur sélection dynamique,
+* faire fonctionner les polices sur tous les templates,
+* et garantir la compatibilité avec le rendu PDF/export.
+
+Je veux un vrai système scalable de gestion des fonts, pas juste quelques classes hardcodées.
+
+# 2. Bug : interligne / espacement du texte partiellement cassé
+
+Le réglage de l’espacement/interligne fonctionne sur certaines sections du CV, mais pas partout.
+
+Actuellement :
+
+* la partie gauche semble réagir correctement,
+* mais la partie droite ne change presque pas.
+
+Tu dois :
+
+* Identifier pourquoi certaines sections ignorent les paramètres d’espacement.
+* Vérifier :
+
+  * les classes hardcodées,
+  * les containers flex/grid,
+  * les styles inline,
+  * les composants réutilisables,
+  * et les différences entre templates.
+* Uniformiser totalement le système de spacing.
+* Centraliser les valeurs d’interligne et d’espacement.
+* Faire en sorte que tous les blocs du CV réagissent au même système global de spacing.
+
+Je veux une logique cohérente et maintenable.
+
+# 3. Internationalisation complète (FR / EN)
+
+Actuellement, certaines parties sont encore mélangées :
+
+* français,
+* anglais,
+* labels hardcodés,
+* textes incohérents.
+
+Je veux un vrai système multilingue.
+
+Tu dois :
+
+* Mettre TOUT le site en français par défaut.
+* Ajouter une vraie gestion FR / EN.
+* Permettre de changer la langue facilement.
+* Externaliser tous les textes.
+* Supprimer les textes hardcodés dans les composants.
+* Ajouter un système propre du type :
+
+  * dictionnaires,
+  * fichiers de traduction,
+  * i18n,
+  * ou architecture équivalente.
+
+Toutes les sections doivent être traduisibles :
+
+* Contact
+* Expérience professionnelle
+* Compétences
+* Formation
+* Langues
+* Boutons
+* Menus
+* Placeholders
+* Messages système
+* etc.
+
+Je veux une architecture propre et scalable pour ajouter d’autres langues plus tard.
+
+# 4. Bug de personnalisation des couleurs des templates
+
+Le dernier design ajouté est orange par défaut.
+
+Quand on change la couleur :
+
+* la couleur principale du template ne change pas,
+* seule la bordure/autour de la photo change.
+
+Même problème sur certains autres templates.
+
+Je veux un vrai système de theming dynamique.
+
+Tu dois :
+
+* Identifier tous les endroits où des couleurs hardcodées existent.
+* Refactoriser le système de couleurs.
+* Remplacer les couleurs statiques par :
+
+  * variables CSS,
+  * design tokens,
+  * ou un système de thème centralisé.
+* Faire en sorte que :
+
+  * toutes les sections du CV réagissent à la couleur choisie,
+  * les titres,
+  * accents,
+  * icônes,
+  * séparateurs,
+  * timelines,
+  * badges,
+  * sidebars,
+  * headers,
+  * progress bars,
+  * backgrounds subtils,
+  * hover states,
+  * etc. utilisent correctement la couleur dynamique.
+
+Je veux :
+
+* une architecture scalable,
+* cohérente entre tous les templates,
+* facile à maintenir,
+* et simple pour ajouter de nouveaux thèmes/templates plus tard.
+
+# 5. Nouveau template/design premium
+
+Je veux maintenant un nouveau design de CV totalement différent des deux premiers.
+
+Contraintes :
+
+* élégant,
+* moderne,
+* premium,
+* minimaliste,
+* professionnel,
+* mais sans abus de grosses couleurs flashy.
+
+Je veux :
+
+* une palette subtile,
+* une bonne hiérarchie visuelle,
+* des accents élégants,
+* un rendu très propre,
+* un style moderne type SaaS/premium/recruteur haut de gamme.
+
+Le design doit :
+
+* parfaitement réagir aux couleurs dynamiques,
+* fonctionner avec les options de personnalisation,
+* être responsive,
+* être optimisé pour PDF,
+* et rester lisible/imprimable.
+
+Je veux que tu proposes :
+
+* une vraie direction artistique,
+* pas juste une variation mineure des templates existants.
+
+# 6. Rebranding complet du site
+
+Le site n’est plus un clone de cv.fr.
+
+Je veux donc un vrai rebranding.
+
+Tu dois :
+
+* Supprimer toute mention :
+
+  * “cv.fr clone”
+  * “clone premium”
+  * ou toute référence au clonage.
+* Renommer le projet avec une vraie identité.
+* Par exemple :
+
+  * cv.tn
+  * ou autre branding professionnel cohérent.
+
+Je veux :
+
+* un header moderne,
+* une identité propre,
+* un branding cohérent,
+* une navbar plus professionnelle.
+
+# 7. Refonte du header / top bar
+
+La barre actuelle ne fait pas premium.
+
+Je veux que tu :
+
+* redesignes complètement le header,
+* simplifies l’UI,
+* modernises la navigation,
+* améliores les espacements,
+* améliores la hiérarchie visuelle,
+* et donnes un rendu plus professionnel/SaaS moderne.
+
+Le header doit :
+
+* être propre,
+* minimaliste,
+* responsive,
+* cohérent avec le nouveau branding.
+
+# 8. Bouton “Mode bureau / Fullscreen”
+
+Le bouton à droite doit désormais fonctionner correctement.
+
+Je veux que lorsque je clique dessus :
+
+* l’éditeur prenne tout l’espace possible,
+* l’expérience devienne immersive,
+* et idéalement essayer de masquer les éléments parasites du navigateur.
+
+Je sais qu’on ne peut pas complètement supprimer l’UI du navigateur dans Chrome/Google, mais :
+
+* utilise le Fullscreen API,
+* optimise le mode plein écran,
+* masque les éléments internes inutiles,
+* et rends l’expérience beaucoup plus propre.
+
+Je veux un vrai mode focus/fullscreen professionnel.
+
+# 9. Qualité attendue
+
+Je veux que tu :
+
+* analyses l’architecture actuelle,
+* identifies les causes profondes,
+* refactorises proprement,
+* évites les régressions,
+* gardes un code maintenable,
+* évites les hardcodes,
+* et crées une architecture scalable.
+
+Quand tu modifies du code :
+
+* montre les fichiers modifiés,
+* explique les changements importants,
+* et donne le code final propre.
+
+Je veux une vraie amélioration production-ready, pas des fixes temporaires.
