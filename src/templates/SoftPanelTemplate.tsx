@@ -13,12 +13,12 @@ export const SoftPanelTemplate: React.FC<TemplateProps> = ({ data }) => {
   const photoStyle = photoCropStyle(personalInfo);
 
   const renderMainSection = (section: CVSection) => (
-    <section key={section.id} style={{ marginBottom: "calc(var(--cv-spacing) * 1.1)" }}>
+    <section key={section.id} className="section-group" style={{ marginBottom: "calc(var(--cv-spacing) * 1.1)" }} data-section-id={section.id}>
       <h3 style={{ fontSize: "calc(var(--cv-font-size) * 1.28)", fontWeight: 900, color: colors.secondary, lineHeight: 1, marginBottom: "0.45rem" }}>
         {sectionTitle(section, data.language)}
       </h3>
       {section.type === "experience" && section.items.map((item) => (
-        <article key={item.id} style={{ marginBottom: "0.7rem" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ marginBottom: "0.7rem" }}>
           <div style={{ fontSize: "calc(var(--cv-font-size) * 0.74)", fontWeight: 800, color: colors.text, textTransform: "uppercase" }}>
             {item.position} {dateRange(item) && <span>- {dateRange(item)}</span>}
           </div>
@@ -31,14 +31,14 @@ export const SoftPanelTemplate: React.FC<TemplateProps> = ({ data }) => {
         </article>
       ))}
       {section.type === "education" && section.items.map((item) => (
-        <article key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", marginBottom: "0.45rem" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", marginBottom: "0.45rem" }}>
           <strong style={{ color: colors.secondary, textTransform: "uppercase" }}>{item.institution}</strong>
           <div>{item.degree} {item.fieldOfStudy && `/ ${item.fieldOfStudy}`}</div>
           <div style={{ color: colors.primary, fontWeight: 700 }}>{dateRange(item)}</div>
         </article>
       ))}
       {section.type === "projects" && section.items.map((item) => (
-        <article key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", marginBottom: "0.55rem" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", marginBottom: "0.55rem" }}>
           <strong style={{ color: colors.secondary }}>{item.name}</strong>
           {item.technologies && <div style={{ color: colors.primary, fontWeight: 700 }}>{item.technologies}</div>}
           <p style={{ margin: "0.15rem 0 0", lineHeight: 1.45 }}>{item.description}</p>
@@ -51,7 +51,7 @@ export const SoftPanelTemplate: React.FC<TemplateProps> = ({ data }) => {
         </div>
       ))}
       {section.type === "custom" && section.items.map((item) => (
-        <article key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", marginBottom: "0.55rem" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", marginBottom: "0.55rem" }}>
           <strong style={{ color: colors.secondary }}>{item.title}</strong>
           {item.subtitle && <div style={{ color: colors.primary, fontWeight: 700 }}>{item.subtitle}</div>}
           <p style={{ whiteSpace: "pre-line", margin: "0.15rem 0 0", lineHeight: 1.45 }}>{item.description}</p>
@@ -65,7 +65,7 @@ export const SoftPanelTemplate: React.FC<TemplateProps> = ({ data }) => {
       id="cv-capture-area"
       className="a4-page"
       style={{
-        minHeight: "100%",
+        minHeight: "var(--cv-page-height, 1123px)",
         padding: "42px 52px",
         background: colors.background,
         color: colors.text,
@@ -75,7 +75,7 @@ export const SoftPanelTemplate: React.FC<TemplateProps> = ({ data }) => {
       }}
     >
       <header style={{ display: "grid", gridTemplateColumns: "150px 1fr", alignItems: "center", gap: "1.1rem", marginBottom: "1.1rem" }}>
-        <div style={{ width: 128, height: 128, borderRadius: "50%", overflow: "hidden", position: "relative", background: "#e5e7eb", justifySelf: "center" }}>
+        <div className="photo-container" style={{ width: 128, height: 128, borderRadius: "50%", overflow: "hidden", position: "relative", background: "#e5e7eb", justifySelf: "center" }}>
           {personalInfo.photoUrl && <img src={personalInfo.photoUrl} alt={`${personalInfo.firstName} ${personalInfo.lastName}`} style={photoStyle} />}
         </div>
         <div style={{ background: colors.primary, borderRadius: "18px 18px 18px 4px", padding: "1.25rem 1.7rem", color: colors.secondary }}>

@@ -25,10 +25,10 @@ export const ExecutiveBandTemplate: React.FC<TemplateProps> = ({ data }) => {
   );
 
   const renderMainSection = (section: CVSection) => (
-    <section key={section.id} style={{ marginBottom: "calc(var(--cv-spacing) * 1.15)" }}>
+    <section key={section.id} className="section-group" style={{ marginBottom: "calc(var(--cv-spacing) * 1.15)" }} data-section-id={section.id}>
       {renderMainTitle(sectionTitle(section, data.language))}
       {section.type === "experience" && section.items.map((item) => (
-        <article key={item.id} style={{ marginBottom: "0.85rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ marginBottom: "0.85rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", color: colors.secondary, fontWeight: 900 }}>
             <span>{item.position}</span>
             <span style={{ color: colors.primary, whiteSpace: "nowrap" }}>{dateRange(item)}</span>
@@ -40,14 +40,14 @@ export const ExecutiveBandTemplate: React.FC<TemplateProps> = ({ data }) => {
         </article>
       ))}
       {section.type === "education" && section.items.map((item) => (
-        <article key={item.id} style={{ marginBottom: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ marginBottom: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
           <div style={{ color: colors.secondary, fontWeight: 900 }}>{item.degree}</div>
           <div>{item.institution} {item.fieldOfStudy && `/ ${item.fieldOfStudy}`}</div>
           <div style={{ color: colors.primary, fontWeight: 800 }}>{dateRange(item)}</div>
         </article>
       ))}
       {section.type === "projects" && section.items.map((item) => (
-        <article key={item.id} style={{ marginBottom: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ marginBottom: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
           <strong style={{ color: colors.secondary }}>{item.name}</strong>
           {item.technologies && <div style={{ color: colors.primary, fontWeight: 800 }}>{item.technologies}</div>}
           <p style={{ margin: "0.2rem 0 0" }}>{item.description}</p>
@@ -60,7 +60,7 @@ export const ExecutiveBandTemplate: React.FC<TemplateProps> = ({ data }) => {
         </div>
       ))}
       {section.type === "custom" && section.items.map((item) => (
-        <article key={item.id} style={{ marginBottom: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
+        <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ marginBottom: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
           <strong style={{ color: colors.secondary }}>{item.title}</strong>
           {item.subtitle && <div style={{ color: colors.primary, fontWeight: 800 }}>{item.subtitle}</div>}
           <p style={{ whiteSpace: "pre-line", margin: "0.2rem 0 0" }}>{item.description}</p>
@@ -76,7 +76,7 @@ export const ExecutiveBandTemplate: React.FC<TemplateProps> = ({ data }) => {
       style={{
         display: "grid",
         gridTemplateColumns: "32% 68%",
-        minHeight: "100%",
+        minHeight: "var(--cv-page-height, 1123px)",
         background: colors.background,
         color: colors.text,
         fontFamily: "var(--cv-font-family)",
@@ -85,7 +85,7 @@ export const ExecutiveBandTemplate: React.FC<TemplateProps> = ({ data }) => {
       }}
     >
       <aside style={{ background: colors.sidebarBg, color: colors.sidebarText, padding: "1.35rem 1rem", display: "flex", flexDirection: "column", gap: "0.95rem" }}>
-        <div style={{ width: 126, height: 126, borderRadius: "50%", border: `4px solid ${colors.primary}`, overflow: "hidden", position: "relative", background: "#e5e7eb", margin: "0 auto" }}>
+        <div className="photo-container" style={{ width: 126, height: 126, borderRadius: "50%", border: `4px solid ${colors.primary}`, overflow: "hidden", position: "relative", background: "#e5e7eb", margin: "0 auto" }}>
           {personalInfo.photoUrl && <img src={personalInfo.photoUrl} alt={`${personalInfo.firstName} ${personalInfo.lastName}`} style={photoStyle} />}
         </div>
 

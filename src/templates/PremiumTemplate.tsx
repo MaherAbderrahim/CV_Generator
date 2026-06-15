@@ -14,7 +14,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import { cvLabels, sectionTitle } from "./templateHelpers";
+import { cvLabels, sectionTitle, photoCropStyle } from "./templateHelpers";
 
 interface TemplateProps {
   data: CVData;
@@ -59,24 +59,13 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
   const isLeftSidebar = layout.sidebarSide === "left";
   const sidebarSections = isLeftSidebar ? orderedSections("left") : orderedSections("right");
   const mainSections = isLeftSidebar ? orderedSections("right") : orderedSections("left");
-  const photoZoom = Math.max(personalInfo.photoZoom ?? 100, 100);
-  const photoX = personalInfo.photoPositionX ?? 50;
-  const photoY = personalInfo.photoPositionY ?? 50;
-  const photoStyle = {
-    position: "absolute" as const,
-    width: `${photoZoom}%`,
-    height: `${photoZoom}%`,
-    left: `${((100 - photoZoom) * photoX) / 100}%`,
-    top: `${((100 - photoZoom) * photoY) / 100}%`,
-    objectFit: "cover" as const,
-    objectPosition: `${personalInfo.photoPositionX ?? 50}% ${personalInfo.photoPositionY ?? 50}%`,
-  };
+  const photoStyle = photoCropStyle(personalInfo);
 
   const renderCompactSection = (section: CVSection) => {
     if (section.items.length === 0) return null;
 
     return (
-      <section key={section.id} style={{ display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 0.7)" }}>
+      <section key={section.id} className="section-group" data-section-id={section.id} style={{ display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 0.7)" }}>
         <h3 style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "calc(var(--cv-font-size) * 0.82)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--cv-sidebar-text)", borderBottom: "1px solid color-mix(in srgb, var(--cv-sidebar-text) 20%, transparent)", paddingBottom: "0.35rem" }}>
           {sectionIcon(section.type)}
           {sectionTitle(section, data.language)}
@@ -134,7 +123,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
     if (section.items.length === 0) return null;
 
     return (
-      <section key={section.id} style={{ display: "grid", gridTemplateColumns: "78px 1fr", gap: "0.8rem", alignItems: "start" }}>
+      <section key={section.id} className="section-group" data-section-id={section.id} style={{ display: "grid", gridTemplateColumns: "78px 1fr", gap: "0.8rem", alignItems: "start" }}>
         <h3 style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", fontSize: "calc(var(--cv-font-size) * 0.58)", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.03em", lineHeight: 1.18, color: "var(--cv-secondary)", paddingTop: "0.2rem", overflowWrap: "anywhere" }}>
           {sectionIcon(section.type)}
           {sectionTitle(section, data.language)}
@@ -142,7 +131,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 0.9)", borderLeft: "2px solid color-mix(in srgb, var(--cv-primary) 22%, transparent)", paddingLeft: "1rem" }}>
           {section.type === "experience" && section.items.map((item) => (
-            <article key={item.id} style={{ position: "relative" }}>
+            <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ position: "relative" }}>
               <span style={{ position: "absolute", left: "-1.32rem", top: "0.35rem", width: 9, height: 9, borderRadius: "50%", background: "var(--cv-primary)" }} />
               <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "baseline" }}>
                 <h4 style={{ fontWeight: 850, color: "var(--cv-text)", fontSize: "calc(var(--cv-font-size) * 0.98)" }}>{item.position}</h4>
@@ -156,7 +145,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
           ))}
 
           {section.type === "education" && section.items.map((item) => (
-            <article key={item.id} style={{ position: "relative" }}>
+            <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ position: "relative" }}>
               <span style={{ position: "absolute", left: "-1.32rem", top: "0.35rem", width: 9, height: 9, borderRadius: "50%", background: "var(--cv-primary)" }} />
               <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "baseline" }}>
                 <h4 style={{ fontWeight: 850, color: "var(--cv-text)", fontSize: "calc(var(--cv-font-size) * 0.98)" }}>{item.degree}</h4>
@@ -170,7 +159,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
           ))}
 
           {section.type === "projects" && section.items.map((item) => (
-            <article key={item.id} style={{ position: "relative" }}>
+            <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ position: "relative" }}>
               <span style={{ position: "absolute", left: "-1.32rem", top: "0.35rem", width: 9, height: 9, borderRadius: "50%", background: "var(--cv-primary)" }} />
               <h4 style={{ fontWeight: 850, color: "var(--cv-text)", fontSize: "calc(var(--cv-font-size) * 0.98)", display: "flex", gap: "0.35rem", alignItems: "center" }}>
                 {item.name}
@@ -218,7 +207,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
           )}
 
           {section.type === "custom" && section.items.map((item) => (
-            <article key={item.id}>
+            <article key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem" }}>
                 <strong style={{ color: "var(--cv-text)" }}>{item.title}</strong>
                 {item.date && <span style={{ color: "var(--cv-primary)", fontWeight: 800, fontSize: "calc(var(--cv-font-size) * 0.76)" }}>{item.date}</span>}
@@ -232,6 +221,8 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
     );
   };
 
+  const sidebarWidthPct = "32%";
+
   return (
     <div
       id="cv-capture-area"
@@ -239,18 +230,18 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
       style={{
         display: "flex",
         flexDirection: isLeftSidebar ? "row" : "row-reverse",
-        minHeight: "100%",
+        minHeight: "var(--cv-page-height, 1123px)",
         fontFamily: "var(--cv-font-family)",
         fontSize: "var(--cv-font-size)",
         lineHeight: "var(--cv-line-height)",
         color: "var(--cv-text)",
-        background: "var(--cv-bg)",
       }}
     >
+
       <aside
         style={{
-          width: "32%",
-          background: "var(--cv-sidebar-bg)",
+          width: sidebarWidthPct,
+          backgroundColor: "var(--cv-sidebar-bg)",
           color: "var(--cv-sidebar-text)",
           padding: "calc(var(--cv-spacing) * 1.35)",
           display: "flex",
@@ -264,13 +255,13 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
 
         {personalInfo.photoUrl && (
           <div style={{ width: 130, height: 154, clipPath: "polygon(50% 0%, 100% 18%, 100% 82%, 50% 100%, 0 82%, 0 18%)", background: "var(--cv-primary)", padding: 4, margin: "0 auto", zIndex: 1 }}>
-            <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", clipPath: "polygon(50% 0%, 100% 18%, 100% 82%, 50% 100%, 0 82%, 0 18%)" }}>
+            <div className="photo-container" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", clipPath: "polygon(50% 0%, 100% 18%, 100% 82%, 50% 100%, 0 82%, 0 18%)" }}>
               <img src={personalInfo.photoUrl} alt={`${personalInfo.firstName} ${personalInfo.lastName}`} style={photoStyle} />
             </div>
           </div>
         )}
 
-        <div style={{ textAlign: "center", zIndex: 1 }}>
+        <div className="cv-header-block" style={{ textAlign: "center", zIndex: 1 }}>
           <h1 style={{ fontSize: "calc(var(--cv-font-size) * 1.65)", fontWeight: 900, lineHeight: 1.05, color: "var(--cv-sidebar-text)", textTransform: "uppercase" }}>
             {personalInfo.firstName}
             <span style={{ display: "block", color: "var(--cv-primary)" }}>{personalInfo.lastName}</span>
@@ -278,7 +269,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
           {personalInfo.title && <p style={{ marginTop: "0.45rem", fontSize: "calc(var(--cv-font-size) * 0.78)", letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.86 }}>{personalInfo.title}</p>}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem", fontSize: "calc(var(--cv-font-size) * 0.76)", zIndex: 1 }}>
+        <div className="cv-header-block" style={{ display: "flex", flexDirection: "column", gap: "0.45rem", fontSize: "calc(var(--cv-font-size) * 0.76)", zIndex: 1 }}>
           {personalInfo.email && <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}><Mail size={12} style={{ color: "var(--cv-primary)" }} />{personalInfo.email}</div>}
           {personalInfo.phone && <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}><Phone size={12} style={{ color: "var(--cv-primary)" }} />{personalInfo.phone}</div>}
           {personalInfo.address && <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}><MapPin size={12} style={{ color: "var(--cv-primary)" }} />{personalInfo.address}</div>}
@@ -286,7 +277,7 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
         </div>
 
         {socialLinks.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", fontSize: "calc(var(--cv-font-size) * 0.74)" }}>
+          <div className="cv-header-block" style={{ display: "flex", flexDirection: "column", gap: "0.35rem", fontSize: "calc(var(--cv-font-size) * 0.74)" }}>
             {socialLinks.map((link) => (
               <a key={link.id} href={link.url} target="_blank" rel="noreferrer" style={{ color: "var(--cv-sidebar-text)", textDecoration: "none", opacity: 0.86 }}>
                 <strong style={{ color: "var(--cv-primary)" }}>{link.platform}</strong> / {link.username}
@@ -298,9 +289,9 @@ export const PremiumTemplate: React.FC<TemplateProps> = ({ data }) => {
         {sidebarSections.map(renderCompactSection)}
       </aside>
 
-      <main style={{ width: "68%", padding: "calc(var(--cv-spacing) * 1.45)", display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 1.25)" }}>
+      <main style={{ width: "68%", backgroundColor: "var(--cv-bg)", padding: "calc(var(--cv-spacing) * 1.45)", display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 1.25)" }}>
         {personalInfo.summary && (
-          <section style={{ display: "grid", gridTemplateColumns: "78px 1fr", gap: "0.8rem", alignItems: "start" }}>
+          <section className="section-group" style={{ display: "grid", gridTemplateColumns: "78px 1fr", gap: "0.8rem", alignItems: "start" }}>
             <h3 style={{ fontSize: "calc(var(--cv-font-size) * 0.58)", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.03em", lineHeight: 1.18, color: "var(--cv-secondary)" }}>{t.profile}</h3>
             <p style={{ color: "var(--cv-text)", opacity: 0.88, fontSize: "calc(var(--cv-font-size) * 0.9)", borderLeft: "2px solid var(--cv-primary)", paddingLeft: "1rem", whiteSpace: "pre-line" }}>
               {personalInfo.summary}

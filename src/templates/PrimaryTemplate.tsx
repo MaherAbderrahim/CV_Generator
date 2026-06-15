@@ -15,7 +15,7 @@ import {
   Heart,
   Grid,
 } from "lucide-react";
-import { cvLabels, sectionTitle } from "./templateHelpers";
+import { cvLabels, sectionTitle, photoCropStyle } from "./templateHelpers";
 
 interface TemplateProps {
   data: CVData;
@@ -26,18 +26,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
   const t = cvLabels(data.language);
   const socialLinks = data.socialLinks ?? [];
   const sections = data.sections ?? [];
-  const photoZoom = Math.max(personalInfo.photoZoom ?? 100, 100);
-  const photoX = personalInfo.photoPositionX ?? 50;
-  const photoY = personalInfo.photoPositionY ?? 50;
-  const photoStyle = {
-    position: "absolute" as const,
-    width: `${photoZoom}%`,
-    height: `${photoZoom}%`,
-    left: `${((100 - photoZoom) * photoX) / 100}%`,
-    top: `${((100 - photoZoom) * photoY) / 100}%`,
-    objectFit: "cover" as const,
-    objectPosition: `${personalInfo.photoPositionX ?? 50}% ${personalInfo.photoPositionY ?? 50}%`,
-  };
+  const photoStyle = photoCropStyle(personalInfo);
 
   // Apply typography fonts
   const fontClass =
@@ -139,7 +128,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
     if (section.items.length === 0) return null;
 
     return (
-      <div key={section.id} className="space-y-3.5">
+      <div key={section.id} className="section-group space-y-3.5" data-section-id={section.id}>
         <div className="flex items-center gap-2 border-b pb-1.5" style={{ borderColor: `${colors.sidebarText}15` }}>
           {renderSectionIcon(section.type, colors.primary)}
           <h3
@@ -222,7 +211,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
     if (section.items.length === 0) return null;
 
     return (
-      <div key={section.id} className="space-y-4">
+      <div key={section.id} className="section-group space-y-4" data-section-id={section.id}>
         {/* Section Title with accent underbar */}
         <div className="relative border-b pb-1.5" style={{ borderColor: `${colors.secondary}15` }}>
           <div className="flex items-center gap-2">
@@ -243,7 +232,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
         <div className={itemSpacingClass}>
           {section.type === "experience" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="text-xs md:text-sm font-bold tracking-wide" style={{ color: colors.secondary }}>
@@ -268,7 +257,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {section.type === "education" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="text-xs md:text-sm font-bold tracking-wide" style={{ color: colors.secondary }}>
@@ -295,7 +284,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {section.type === "projects" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex justify-between items-start">
                   <h4 className="text-xs md:text-sm font-bold flex items-center gap-1.5" style={{ color: colors.secondary }}>
                     {item.name}
@@ -375,7 +364,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {section.type === "custom" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-2 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="text-xs md:text-sm font-bold" style={{ color: colors.secondary }}>
@@ -435,7 +424,7 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
       >
         <div className="cv-primary-header-main flex items-center gap-5">
           {personalInfo.photoUrl && (
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 shadow-sm overflow-hidden relative shrink-0" style={{ borderColor: colors.primary }}>
+            <div className="photo-container w-16 h-16 md:w-20 md:h-20 rounded-full border-2 shadow-sm overflow-hidden relative shrink-0" style={{ borderColor: colors.primary }}>
               <img
                 src={personalInfo.photoUrl}
                 alt={`${personalInfo.firstName} ${personalInfo.lastName}`}
@@ -496,10 +485,15 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
       </div>
 
       {/* 2. Main content area (Split Sidebar / Content) */}
-      <div className="cv-primary-body flex-grow flex flex-row" style={{ minHeight: 0 }}>
+      <div
+        className="cv-primary-body flex-grow flex flex-row"
+        style={{
+          minHeight: 0,
+        }}
+      >
         {/* Render columns depending on layout.sidebarSide */}
         
-        {/* Sidebar Column (Dark) */}
+        {/* Sidebar Column (Dark) — solid background for html2canvas compatibility */}
         <div
           className="w-[240px] shrink-0 space-y-6"
           style={{
@@ -543,19 +537,19 @@ export const PrimaryTemplate: React.FC<TemplateProps> = ({ data }) => {
           {orderedLeft.map((section) => renderSidebarSection(section))}
         </div>
 
-        {/* Main Column (White) */}
+        {/* Main Column (White) — solid background for html2canvas compatibility */}
         <div
           className="cv-primary-main flex-grow flex flex-col space-y-6"
           style={{
+            backgroundColor: colors.background,
             padding: paddingStyle,
             order: isSidebarLeft ? 2 : 1,
-            backgroundColor: colors.background,
             width: "calc(100% - 240px)",
           }}
         >
           {/* Professional summary / Profile statement */}
           {personalInfo.summary && (
-            <div className="space-y-3">
+            <div className="section-group space-y-3">
               <div className="relative border-b pb-1.5" style={{ borderColor: `${colors.secondary}15` }}>
                 <h3
                   className="text-sm font-bold uppercase tracking-wider flex items-center gap-2"

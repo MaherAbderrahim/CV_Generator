@@ -99,7 +99,7 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
       {/* Render All Sections in Full Width */}
       <div style={{ display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 1.5)" }}>
         {orderedSections.map((section) => (
-          <div key={section.id} style={{ display: "flex", flexDirection: "column", gap: "var(--cv-spacing)" }}>
+          <div key={section.id} className="section-group" data-section-id={section.id} style={{ display: "flex", flexDirection: "column", gap: "var(--cv-spacing)" }}>
             {/* Section Title */}
             <h3
               style={{
@@ -121,7 +121,7 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
             <div style={{ display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 0.8)" }}>
               {section.type === "experience" &&
                 section.items.map((item) => (
-                  <div key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
+                  <div key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
                       <span>
                         {item.position} — <span style={{ color: "var(--cv-primary)" }}>{item.company}</span>
@@ -139,7 +139,7 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
 
               {section.type === "education" &&
                 section.items.map((item) => (
-                  <div key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
+                  <div key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
                       <span>
                         {item.degree} <span style={{ fontWeight: "normal", opacity: 0.7 }}>({item.fieldOfStudy})</span>
@@ -157,7 +157,7 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
 
               {section.type === "projects" &&
                 section.items.map((item) => (
-                  <div key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
+                  <div key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
                       <span>
                         {item.name} <span style={{ fontWeight: "normal", opacity: 0.7, fontStyle: "italic" }}>{item.technologies ? `(${item.technologies})` : ""}</span>
@@ -215,7 +215,7 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
 
               {section.type === "custom" &&
                 section.items.map((item) => (
-                  <div key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
+                  <div key={item.id} className="section-item" data-section-id={section.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.85)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
                       <span>{item.title}</span>
                       {item.date && (

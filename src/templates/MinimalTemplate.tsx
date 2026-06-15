@@ -75,7 +75,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = ({ data }) => {
       {/* Sections Layout */}
       <div style={{ display: "flex", flexDirection: "column", gap: "calc(var(--cv-spacing) * 1.5)" }}>
         {orderedSections.map((section) => (
-          <div key={section.id} style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+          <div key={section.id} className="section-group" style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
             
             {/* Sidebar Title */}
             <div style={{ flex: "0 0 25%", minWidth: "120px" }}>

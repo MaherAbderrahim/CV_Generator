@@ -70,20 +70,82 @@ body {
   outline: none;
 }
 
-/* A4 Page Styling for Live Preview */
-.a4-page {
+/* ── A4 Page Viewport Container ──
+   Each [data-cv-page] clips the full template to one A4 viewport.
+   The inner <div> uses translateY(-pageIdx * 1123px) to show the
+   correct vertical slice. No data splitting needed. */
+[data-cv-page] {
   width: 794px;
-  min-height: 1123px;
-  padding: 0;
-  margin: 0 auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  height: 1123px;
+  overflow: hidden;
+  position: relative;
   background: #ffffff;
   color: #0f172a;
-  position: relative;
   box-sizing: border-box;
-  transform-origin: top center;
-  page-break-after: always;
+  flex-shrink: 0;
 }
+
+/* Template wrapper inside each page viewport */
+[data-cv-page] > div {
+  /* translateY is applied inline per page */
+  transform-origin: top left;
+}
+
+/* ── Sidebar full-height fix ──
+   #cv-capture-area uses --cv-page-height (set dynamically in PreviewPanel
+   as totalPages * 1123px) so the sidebar gradient ALWAYS covers all pages.
+   Without this, the gradient stops at content height, leaving the sidebar
+   color short on the last page when content is short. */
+#cv-capture-area {
+  min-height: var(--cv-page-height, 1123px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure the body area (sidebar + main columns) always fills remaining space */
+.cv-primary-body,
+.cv-creative-body {
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+/* Premium / SoftPanel use inline flex-row directly on root — sidebar fix via background gradient on root */
+/* Ensure their sidebar column also fills full height */
+.cv-primary-body > div,
+.cv-creative-body > div {
+  align-self: stretch;
+}
+
+/* Section-group: content blocks that should stay together when splitting pages */
+.section-group {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* ── Page Break Markers — injected by PreviewPanel between .section-group
+     elements to prevent content from being cut across pages.
+     Invisible in preview; triggers page-break-before in print. */
+.cv-page-break-marker {
+  display: none;
+}
+
+@media print {
+  .cv-page-break-marker {
+    display: block;
+    page-break-before: always;
+    break-before: page;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+  }
+}
+
+/* ── Capture Mode: html2canvas-compatible overrides ──
+   Applied temporarily during PDF export. Templates now use solid background
+   colors directly (no gradients), so only minimal overrides are needed. */
+/* color-mix() fallback: computed solid backgrounds (set via JS in PreviewPanel) */
 
 /* Page Break Visual Divider in Preview */
 .page-break-divider {
@@ -166,21 +228,32 @@ body {
     margin: 0 !important;
   }
   
-  /* Force the A4 sheet to print perfectly */
-  .a4-page {
-    transform: none !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    box-shadow: none !important;
+  /* ── Print: each [data-cv-page] = exactly one A4 sheet ── */
+  [data-cv-page] {
+    page-break-after: always !important;
+    break-after: page !important;
     width: 210mm !important;
+    height: 297mm !important;
     min-height: 297mm !important;
-    height: auto !important;
-    page-break-inside: auto !important;
-    break-inside: auto !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: relative !important;
+  }
+
+  [data-cv-page]:last-child {
     page-break-after: avoid !important;
-    page-break-before: avoid !important;
-    background: #ffffff !important;
-    color: #000000 !important;
+    break-after: avoid !important;
+  }
+
+  /* Inner template content — translateY offset must be preserved */
+  [data-cv-page] > div {
+    /* translateY is already set inline; don't override */
+    width: 210mm !important;
   }
 
   .cv-template-primary {
@@ -217,7 +290,8 @@ body {
   }
 
   .cv-template-creative {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
     min-height: 297mm !important;
   }
 

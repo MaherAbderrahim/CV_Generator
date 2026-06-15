@@ -15,7 +15,7 @@ import {
   Calendar,
   Link as LinkIcon,
 } from "lucide-react";
-import { cvLabels, sectionTitle } from "./templateHelpers";
+import { cvLabels, sectionTitle, photoCropStyle } from "./templateHelpers";
 
 interface TemplateProps {
   data: CVData;
@@ -25,18 +25,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { colors, typography, layout, personalInfo, socialLinks, sections } = data;
   const t = cvLabels(data.language);
   const accentColor = colors.primary;
-  const photoZoom = Math.max(personalInfo.photoZoom ?? 100, 100);
-  const photoX = personalInfo.photoPositionX ?? 50;
-  const photoY = personalInfo.photoPositionY ?? 50;
-  const photoStyle = {
-    position: "absolute" as const,
-    width: `${photoZoom}%`,
-    height: `${photoZoom}%`,
-    left: `${((100 - photoZoom) * photoX) / 100}%`,
-    top: `${((100 - photoZoom) * photoY) / 100}%`,
-    objectFit: "cover" as const,
-    objectPosition: `${personalInfo.photoPositionX ?? 50}% ${personalInfo.photoPositionY ?? 50}%`,
-  };
+  const photoStyle = photoCropStyle(personalInfo);
 
   const fontClass =
     typography.fontFamily === "Inter"
@@ -126,7 +115,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
     if (section.items.length === 0) return null;
 
     return (
-      <div key={section.id} className="space-y-3 relative pl-4 border-l" style={{ borderColor: `${accentColor}35` }}>
+      <div key={section.id} className="section-group space-y-3 relative pl-4 border-l" data-section-id={section.id} style={{ borderColor: `${accentColor}35` }}>
         {/* Accent dot on the sidebar timeline */}
         <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full border border-slate-900" style={{ backgroundColor: accentColor }} />
         
@@ -196,7 +185,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
     if (section.items.length === 0) return null;
 
     return (
-      <div key={section.id} className="relative pl-6 space-y-4">
+      <div key={section.id} className="section-group relative pl-6 space-y-4" data-section-id={section.id}>
         {/* Dynamic Timeline Dot next to the section title */}
         <div className="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: accentColor }} />
         
@@ -212,7 +201,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
         <div className={itemSpacingClass}>
           {section.type === "experience" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-baseline">
                   <h4 className="text-xs md:text-[13px] font-extrabold text-slate-900">
                     {item.position}
@@ -232,7 +221,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {section.type === "education" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-baseline">
                   <h4 className="text-xs md:text-[13px] font-extrabold text-slate-900">
                     {item.degree}
@@ -254,7 +243,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {section.type === "projects" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex justify-between items-baseline">
                   <h4 className="text-xs md:text-[13px] font-extrabold text-slate-900 flex items-center gap-1.5">
                     {item.name}
@@ -328,7 +317,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {section.type === "custom" &&
             section.items.map((item) => (
-              <div key={item.id} className="space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
+              <div key={item.id} className="section-item space-y-1.5 pb-3 border-b border-dashed border-slate-100 last:border-0 last:pb-0" data-section-id={section.id} data-item-id={item.id}>
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="text-xs md:text-[13px] font-extrabold text-slate-900">
@@ -363,8 +352,11 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
         
         {/* Left Side Header - Matches Sidebar Width */}
         <div
-          className="w-[260px] shrink-0 bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden"
-          style={{ order: isSidebarLeft ? 1 : 2 }}
+          className="w-[260px] shrink-0 flex items-center justify-center p-4 relative overflow-hidden"
+          style={{
+            backgroundColor: '#0f172a',
+            order: isSidebarLeft ? 1 : 2,
+          }}
         >
           {/* Top-left decorative triangle cut */}
           <div
@@ -373,7 +365,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
           />
           
           {personalInfo.photoUrl && (
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 shadow-lg z-10 overflow-hidden relative shrink-0" style={{ borderColor: colors.primary }}>
+            <div className="photo-container w-20 h-20 md:w-24 md:h-24 rounded-full border-4 shadow-lg z-10 overflow-hidden relative shrink-0" style={{ borderColor: colors.primary }}>
               <img
                 src={personalInfo.photoUrl}
                 alt={`${personalInfo.firstName} ${personalInfo.lastName}`}
@@ -388,8 +380,11 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
 
         {/* Right Side Header Name Banner */}
         <div
-          className="flex-grow bg-slate-50 flex flex-col justify-center px-8 py-6"
-          style={{ order: isSidebarLeft ? 2 : 1 }}
+          className="flex-grow flex flex-col justify-center px-8 py-6"
+          style={{
+            backgroundColor: '#f8fafc',
+            order: isSidebarLeft ? 2 : 1,
+          }}
         >
           <h1 className="text-xl md:text-2xl font-black uppercase tracking-widest text-slate-900">
             {personalInfo.firstName} <span style={{ color: accentColor }}>{personalInfo.lastName}</span>
@@ -405,18 +400,24 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
       </div>
 
       {/* 2. Main content area (Timeline Split Sidebar / Content) */}
-      <div className="cv-creative-body flex-grow flex items-stretch min-h-0">
+      <div
+        className="cv-creative-body flex-grow flex items-stretch min-h-0"
+        style={{
+          minHeight: 0,
+        }}
+      >
         
-        {/* Dark Left Sidebar Column */}
+        {/* Dark Left Sidebar Column — solid background for html2canvas compatibility */}
         <div
-          className="w-[260px] shrink-0 bg-slate-950 text-slate-300 flex flex-col gap-6"
+          className="w-[260px] shrink-0 text-slate-300 flex flex-col gap-6"
           style={{
+            backgroundColor: '#0f172a',
             padding: paddingStyle,
             order: isSidebarLeft ? 1 : 2,
           }}
         >
           {/* Contacts & Social Info Block */}
-          <div className="space-y-3">
+          <div className="cv-header-block space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-widest text-white border-b border-slate-800 pb-1 flex items-center gap-1.5">
               {t.contactMe}
             </h3>
@@ -453,7 +454,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
 
           {/* Social Media links if present */}
           {socialLinks.length > 0 && (
-            <div className="space-y-3">
+            <div className="cv-header-block space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-widest text-white border-b border-slate-800 pb-1">
                 {t.socialLinks}
               </h3>
@@ -480,19 +481,20 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
           {orderedLeft.map((section) => renderSidebarSection(section))}
         </div>
 
-        {/* Light Right Column with Vertical Timeline line */}
+        {/* Light Right Column with Vertical Timeline line — solid background for html2canvas compatibility */}
         <div
-          className="flex-grow flex flex-col space-y-6 relative border-l border-slate-200"
+          className="flex-grow flex flex-col space-y-6 relative"
           style={{
+            backgroundColor: '#ffffff',
             padding: paddingStyle,
             order: isSidebarLeft ? 2 : 1,
-            backgroundColor: "#ffffff",
-            width: "calc(100% - 260px)",
+            borderLeft: isSidebarLeft ? `1px solid #e2e8f0` : 'none',
+            borderRight: !isSidebarLeft ? `1px solid #e2e8f0` : 'none',
           }}
         >
           {/* About Me / Summary */}
           {personalInfo.summary && (
-            <div className="relative pl-6 space-y-2">
+            <div className="section-group relative pl-6 space-y-2">
               {/* Timeline Dot */}
               <div className="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: accentColor }} />
               

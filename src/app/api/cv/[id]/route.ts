@@ -24,6 +24,7 @@ export async function GET(request: Request, context: RouteContext) {
       typography: JSON.parse(cv.typography),
       layout: JSON.parse(cv.layout),
       personalInfo: JSON.parse(cv.personalInfo),
+      socialLinks: JSON.parse(cv.socialLinks),
       sections: JSON.parse(cv.sections),
     });
   } catch (error: any) {
@@ -40,7 +41,7 @@ export async function PUT(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const body = await request.json();
-    const { title, template, colors, typography, layout, personalInfo, sections } = body;
+    const { title, template, colors, typography, layout, personalInfo, socialLinks, sections } = body;
 
     const cv = await prisma.cV.update({
       where: { id },
@@ -51,6 +52,7 @@ export async function PUT(request: Request, context: RouteContext) {
         typography: typography ? JSON.stringify(typography) : undefined,
         layout: layout ? JSON.stringify(layout) : undefined,
         personalInfo: personalInfo ? JSON.stringify(personalInfo) : undefined,
+        socialLinks: socialLinks ? JSON.stringify(socialLinks) : undefined,
         sections: sections ? JSON.stringify(sections) : undefined,
       },
     });
@@ -61,6 +63,7 @@ export async function PUT(request: Request, context: RouteContext) {
       typography: JSON.parse(cv.typography),
       layout: JSON.parse(cv.layout),
       personalInfo: JSON.parse(cv.personalInfo),
+      socialLinks: JSON.parse(cv.socialLinks),
       sections: JSON.parse(cv.sections),
     });
   } catch (error: any) {

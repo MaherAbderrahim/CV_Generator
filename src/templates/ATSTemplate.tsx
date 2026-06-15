@@ -81,7 +81,7 @@ export const ATSTemplate: React.FC<TemplateProps> = ({ data }) => {
       {/* Dynamic Sections */}
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--cv-spacing)" }}>
         {orderedSections.map((section) => (
-          <div key={section.id} style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+          <div key={section.id} className="section-group" style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
             <h2 style={{ fontSize: "calc(var(--cv-font-size) * 0.9)", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.05em", borderBottom: "1px solid var(--cv-text)" }}>
               {sectionTitle(section, data.language).toUpperCase()}
             </h2>

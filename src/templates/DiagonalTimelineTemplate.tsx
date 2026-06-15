@@ -22,7 +22,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
   const renderTimelineBlock = (section: CVSection | undefined, children: React.ReactNode) => {
     if (!section && !children) return null;
     return (
-      <section style={{ position: "relative", paddingLeft: "1.65rem", paddingBottom: "1.1rem", borderLeft: `2px solid color-mix(in srgb, ${colors.secondary} 70%, transparent)` }}>
+      <section className="section-group" data-section-id={section?.id} style={{ position: "relative", paddingLeft: "1.65rem", paddingBottom: "1.1rem", borderLeft: `2px solid color-mix(in srgb, ${colors.secondary} 70%, transparent)` }}>
         <span style={{ position: "absolute", left: "-9px", top: 0, width: 17, height: 17, borderRadius: "50%", background: colors.primary }} />
         {section && renderTitle(sectionTitle(section, data.language))}
         <div style={{ marginTop: "0.7rem" }}>{children}</div>
@@ -31,7 +31,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
   };
 
   const renderExperience = (section?: CVSection) => section?.items.map((item) => (
-    <article key={item.id} style={{ marginBottom: "0.9rem" }}>
+    <article key={item.id} className="section-item" data-section-id={section?.id} data-item-id={item.id} style={{ marginBottom: "0.9rem" }}>
       <h4 style={{ margin: 0, color: colors.primary, fontSize: "calc(var(--cv-font-size) * 1.05)", fontWeight: 900, textTransform: "uppercase" }}>{item.position}</h4>
       <div style={{ fontSize: "calc(var(--cv-font-size) * 0.75)", fontWeight: 800, color: colors.secondary }}>
         {item.company} {item.location && `/ ${item.location}`}
@@ -42,7 +42,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
   ));
 
   const renderEducation = (section?: CVSection) => section?.items.map((item) => (
-    <article key={item.id} style={{ marginBottom: "0.9rem" }}>
+    <article key={item.id} className="section-item" data-section-id={section?.id} data-item-id={item.id} style={{ marginBottom: "0.9rem" }}>
       <div style={{ fontSize: "calc(var(--cv-font-size) * 0.72)", color: colors.text }}>{dateRange(item)}</div>
       <h4 style={{ margin: "0.15rem 0", color: colors.secondary, fontSize: "calc(var(--cv-font-size) * 0.92)", fontWeight: 900, textTransform: "uppercase" }}>{item.degree}</h4>
       <div style={{ fontSize: "calc(var(--cv-font-size) * 0.76)", fontStyle: "italic", color: colors.text }}>{item.institution}</div>
@@ -54,7 +54,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
       id="cv-capture-area"
       className="a4-page cv-template-diagonal"
       style={{
-        minHeight: "100%",
+        minHeight: "var(--cv-page-height, 1123px)",
         background: colors.background,
         color: colors.text,
         fontFamily: "var(--cv-font-family)",
@@ -73,7 +73,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
           </h1>
           {personalInfo.title && <div style={{ marginTop: "0.65rem", fontSize: "calc(var(--cv-font-size) * 0.95)", letterSpacing: "0.2em", fontWeight: 850, textTransform: "uppercase", color: colors.secondary }}>{personalInfo.title}</div>}
         </div>
-        <div style={{ position: "relative", zIndex: 1, width: 146, height: 146, borderRadius: "50%", border: `9px solid ${colors.primary}`, overflow: "hidden", background: "#e5e7eb" }}>
+        <div className="photo-container" style={{ position: "relative", zIndex: 1, width: 146, height: 146, borderRadius: "50%", border: `9px solid ${colors.primary}`, overflow: "hidden", background: "#e5e7eb" }}>
           {personalInfo.photoUrl && <img src={personalInfo.photoUrl} alt={`${personalInfo.firstName} ${personalInfo.lastName}`} style={photoStyle} />}
         </div>
       </header>
@@ -88,7 +88,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
             renderTimelineBlock(projects,
             <>
               {projects.items.map((item) => (
-                <article key={item.id} style={{ marginBottom: "0.75rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
+                <article key={item.id} className="section-item" data-section-id={projects.id} data-item-id={item.id} style={{ marginBottom: "0.75rem", fontSize: "calc(var(--cv-font-size) * 0.78)" }}>
                   <strong style={{ color: colors.secondary, textTransform: "uppercase" }}>{item.name}</strong>
                   {item.technologies && <div style={{ color: colors.primary, fontWeight: 800 }}>{item.technologies}</div>}
                   <p style={{ margin: "0.25rem 0 0" }}>{item.description}</p>
@@ -119,7 +119,7 @@ export const DiagonalTimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
             renderTimelineBlock(certifications,
             <>
               {certifications.items.map((item) => (
-                <div key={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.78)", marginBottom: "0.45rem" }}>
+                <div key={item.id} className="section-item" data-section-id={certifications.id} data-item-id={item.id} style={{ fontSize: "calc(var(--cv-font-size) * 0.78)", marginBottom: "0.45rem" }}>
                   <strong>{item.name}</strong> / {item.issuer}
                 </div>
               ))}

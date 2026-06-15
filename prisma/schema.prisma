@@ -15,6 +15,7 @@ model CV {
   typography   String   @default("{\"fontFamily\":\"Inter\",\"fontSize\":\"medium\",\"lineHeight\":\"normal\"}")
   layout       String   @default("{\"sidebarSide\":\"left\",\"sectionsOrder\":[\"profile\",\"experience\",\"education\",\"projects\",\"certifications\",\"skills\",\"languages\",\"interests\",\"custom\"]}")
   personalInfo String   @default("{\"firstName\":\"\",\"lastName\":\"\",\"title\":\"\",\"email\":\"\",\"phone\":\"\",\"address\":\"\",\"website\":\"\",\"photoUrl\":\"\",\"summary\":\"\"}")
+  socialLinks  String   @default("[]") // JSON string of SocialLink array
   sections     String   @default("[]") // JSON string of CVSection array
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
